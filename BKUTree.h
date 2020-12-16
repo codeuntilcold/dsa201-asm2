@@ -25,12 +25,10 @@ public:
         {}
     };
 
+private:
     AVLTree*        avl;
     SplayTree*      splay;
     queue<K>        keys;
-private://////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////
     int             maxNumOfKeys;
 
 public:
@@ -51,29 +49,6 @@ public:
     void    traverseNLROnAVL(void (*func)(K key, V value));
     void    traverseNLROnSplay(void (*func)(K key, V value));
     void    clear();
-
-
-    void InQueue() {
-        queue<K> keyss;
-			while(!keys.empty()){
-		    	keyss.push(keys.front());
-		    	cout << keys.front() << " ";
-		    	keys.pop();
-	    	}
-	    	while(!keyss.empty()){		//Xoa key trong queue
-	    		keys.push(keyss.front());
-	    		keyss.pop();
-			}
-		cout << endl;
-    }
-
-
-
-
-
-
-
-
 
     class SplayTree 
     {
@@ -118,74 +93,6 @@ public:
         void    traverseNLR(void (*func)(K key, V value));
         void    clear();
 
-    void printNSpace(int n)
-    {
-        for (int i = 0; i < n - 1; i++)
-            cout << " ";
-    }
-    void printInteger(int &n)
-    {
-        cout << n << " ";
-    }
-    int getHeightRec(Node *node)
-    {
-        if (node == NULL)
-            return 0;
-        int lh = this->getHeightRec(node->left);
-        int rh = this->getHeightRec(node->right);
-        return (lh > rh ? lh : rh) + 1;
-    }
-    int getHeight()
-    {
-        return this->getHeightRec(this->root);
-    }
-    void printTreeStructure()
-    {
-        int height = this->getHeight();
-        if (this->root == NULL)
-        {
-            cout << "NULL\n";
-            return;
-        }
-        queue<Node *> q;
-        q.push(root);
-        Node *temp;
-        int count = 0;
-        int maxNode = 1;
-        int level = 0;
-        int space = pow(2, height);
-        printNSpace(space / 2);
-        while (!q.empty())
-        {
-            temp = q.front();
-            q.pop();
-            if (temp == NULL)
-            {
-                cout << " ";
-                q.push(NULL);
-                q.push(NULL);
-            }
-            else
-            {
-                cout << temp->entry->key;
-                q.push(temp->left);
-                q.push(temp->right);
-            }
-            printNSpace(space);
-            count++;
-            if (count == maxNode)
-            {
-                cout << endl;
-                count = 0;
-                maxNode *= 2;
-                level++;
-                space /= 2;
-                printNSpace(space / 2);
-            }
-            if (level == height)
-                return;
-        }
-    }
     };
 
     class AVLTree 
@@ -234,77 +141,6 @@ public:
         V       search(K key);
         void    traverseNLR(void (*func)(K key, V value));
         void    clear();
-
-
-
-    void printNSpace(int n)
-    {
-        for (int i = 0; i < n - 1; i++)
-            cout << " ";
-    }
-    void printInteger(int &n)
-    {
-        cout << n << " ";
-    }
-    int getHeightRec(Node *node)
-    {
-        if (node == NULL)
-            return 0;
-        int lh = this->getHeightRec(node->left);
-        int rh = this->getHeightRec(node->right);
-        return (lh > rh ? lh : rh) + 1;
-    }
-    int getHeight()
-    {
-        return this->getHeightRec(this->root);
-    }
-    void printTreeStructure()
-    {
-        int height = this->getHeight();
-        if (this->root == NULL)
-        {
-            cout << "NULL\n";
-            return;
-        }
-        queue<Node *> q;
-        q.push(root);
-        Node *temp;
-        int count = 0;
-        int maxNode = 1;
-        int level = 0;
-        int space = pow(2, height);
-        printNSpace(space / 2);
-        while (!q.empty())
-        {
-            temp = q.front();
-            q.pop();
-            if (temp == NULL)
-            {
-                cout << " ";
-                q.push(NULL);
-                q.push(NULL);
-            }
-            else
-            {
-                cout << temp->entry->key;
-                q.push(temp->left);
-                q.push(temp->right);
-            }
-            printNSpace(space);
-            count++;
-            if (count == maxNode)
-            {
-                cout << endl;
-                count = 0;
-                maxNode *= 2;
-                level++;
-                space /= 2;
-                printNSpace(space / 2);
-            }
-            if (level == height)
-                return;
-        }
-    }
     };
 };
 
@@ -485,7 +321,7 @@ void    BKUTree<K, V>::AVLTree::add(Entry* entry)
         else if (p->entry->key > entry->key) {
             p = p->left;
         }
-        else throw  "Duplicate key";
+        else throw "Duplicate key";
     }
     add(root, entry);
 }
@@ -924,72 +760,13 @@ void    BKUTree<K, V>::SplayTree::halfsplay(Node* & root, K key)
 template <class K, class V>
 V       BKUTree<K, V>::SplayTree::splayOnce(K key, vector<K>& traversedList, bool record) 
 {
-    // // Note: node containing the key above will not be the root
-    // // in this implementation
-    // Node* p = root;
-    // while (p != nullptr) 
-    // {
-    //     if (key < p->entry->key)
-    //     {
-    //         // if (p->left == nullptr) {
-    //         //     p = p->right;
-    //         // }
-    //         traversedList.push_back(p->entry->key);
-    //         if (key == p->left->entry->key) {
-    //             rotRight(p);
-    //             return p->entry->value;
-    //         }
-    //         else if (p->left->left != nullptr && key == p->left->left->entry->key) {      // Left - Left
-    //             traversedList.push_back(p->left->entry->key);
-    //             rotRight(p);
-    //             rotRight(p);
-    //             return p->entry->value;
-    //         }
-    //         else if (p->left->right != nullptr && key == p->left->right->entry->key) {    // Left - Right
-    //             traversedList.push_back(p->left->entry->key);
-    //             rotLeft(p->left);
-    //             rotRight(p);
-    //             return p->entry->value;
-    //         }
-    //         else {
-    //             p = p->left;
-    //         }
-    //     }
-    //     else if (p->entry->key < key)
-    //     {
-    //         // if (p->right == nullptr) return;
-    //         traversedList.push_back(p->entry->key);
-    //         if (key == p->right->entry->key) {
-    //             rotLeft(p);
-    //             return p->entry->value;
-    //         }
-    //         else if (p->right->right != nullptr && key == p->right->right->entry->key) {    // Right - Right
-    //             traversedList.push_back(p->right->entry->key);
-    //             rotLeft(p);
-    //             rotLeft(p);
-    //             return p->entry->value;
-    //         }
-    //         else if (p->right->left != nullptr && key == p->right->left->entry->key) {      // Left - Right
-    //             traversedList.push_back(p->right->entry->key);
-    //             rotRight(p->right);
-    //             rotLeft(p);
-    //             return p->entry->value;
-    //         }
-    //         else {
-    //             p = p->right;
-    //         }
-    //     }
-    // }
-    // throw "Not found";
-
+    // Note: node containing the key above will not be the root
+    // in this implementation
     Node** p = &root;
     while (*p != nullptr) 
     {
         if (key < (*p)->entry->key)
         {
-            // if (p->left == nullptr) {
-            //     p = p->right;
-            // }
             if (record) traversedList.push_back((*p)->entry->key);
             if (key == (*p)->left->entry->key) {
                 rotRight(*p);
@@ -1013,7 +790,6 @@ V       BKUTree<K, V>::SplayTree::splayOnce(K key, vector<K>& traversedList, boo
         }
         else if ((*p)->entry->key < key)
         {
-            // if ((*p)->right == nullptr) return;
             if (record) traversedList.push_back((*p)->entry->key);
             if (key == (*p)->right->entry->key) {
                 rotLeft(*p);
