@@ -21,5 +21,8 @@
         "algorithm": "cpp",
         "cctype": "cpp",
         "cstdio": "cpp"
-    }
+    },
+    "python.pythonPath": "c:\\Windows\\py.exe",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }
