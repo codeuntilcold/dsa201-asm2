@@ -124,7 +124,6 @@ public:
         bool    balanceRight(Node* & root);
         bool    add(Node* & root, Entry* entry);
         bool    remove(Node* & root, K key);
-        V       search(Node* root, K key);
 
         void    traverseNLR(Node* & root, void (*func)(K key, V value));
         void    clear(Node* & root);
@@ -346,7 +345,19 @@ void    BKUTree<K, V>::AVLTree::remove(K key)
 template <class K, class V>
 V       BKUTree<K, V>::AVLTree::search(K key)
 {
-    return search(root, key);
+    Node* p = root;
+    while (p != nullptr) {
+        if (p->entry->key < key) {
+            p = p->right;
+        }
+        else if (p->entry->key > key) {
+            p = p->left;
+        }
+        else {
+            return p->entry->value;
+        }
+    }
+    throw "Not found";
 }
 template <class K, class V>
 void    BKUTree<K, V>::AVLTree::traverseNLR(void (*func)(K key, V value))
